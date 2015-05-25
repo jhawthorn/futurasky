@@ -13,7 +13,7 @@ static void *layer = NULL;
 weather_info_t current_weather;
 time_t weather_last_updated = 0;
 
-static void draw(){
+void weather_draw(){
   weather_layer_set_temp(layer, current_weather.temperature);
   weather_layer_set_icon(layer, current_weather.icon);
 }
@@ -33,7 +33,7 @@ void weather_init(WeatherLayer *weather_layer){
 
   if (persist_exists(STORAGE_CURRENT_WEATHER)) {
     load_data();
-    draw();
+    weather_draw();
   } else {
     weather_layer_set_icon(layer, RESOURCE_ID_ICON_LOADING);
   }
@@ -46,7 +46,7 @@ void weather_update(weather_info_t *w){
   weather_last_updated = time(NULL);
 
   save_data();
-  draw();
+  weather_draw();
 }
 
 void weather_refresh(){

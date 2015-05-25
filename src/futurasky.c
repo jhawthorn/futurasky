@@ -36,9 +36,19 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   weather_refresh();
 }
 
+static void bluetooth_handler(bool connected) {
+  if(connected){
+    /* Redraw weather to replace loading icon */
+    weather_draw();
+  } else {
+    weather_layer_set_icon(weather_layer, RESOURCE_ID_ICON_LOADING);
+  }
+}
+
 static void initial_draw() {
   time_t now = time(NULL);
   tick_handler(localtime(&now), SECOND_UNIT | MINUTE_UNIT | HOUR_UNIT | DAY_UNIT);
+  bluetooth_handler(bluetooth_connection_service_peek());
 }
 
 static void window_load(Window *window) {
@@ -74,6 +84,7 @@ static void window_load(Window *window) {
   initial_draw();
 
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  bluetooth_connection_service_subscribe(bluetooth_handler);
 }
 
 static void window_unload(Window *window) {
@@ -96,6 +107,7 @@ static void init(void) {
 
 static void deinit(void) {
   tick_timer_service_unsubscribe();
+  bluetooth_connection_service_unsubscribe();
 
   window_destroy(window);
 }

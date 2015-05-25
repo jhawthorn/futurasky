@@ -8,5 +8,6 @@ typedef struct {
 void weather_init(WeatherLayer *weather_layer);
 void weather_deinit();
 
+void weather_draw();
 void weather_refresh();
 void weather_update(weather_info_t *w);

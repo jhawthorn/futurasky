@@ -31,6 +31,9 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     snprintf(date_text, sizeof(date_text), "%s %i", day_text, tick_time->tm_mday);
     text_layer_set_text(date_layer, date_text);
   }
+
+  /* Refresh the weather if it is stale */
+  weather_refresh();
 }
 
 static void initial_draw() {
@@ -67,8 +70,6 @@ static void window_load(Window *window) {
 
   weather_init(weather_layer);
   network_init();
-
-  network_request_update();
 
   initial_draw();
 

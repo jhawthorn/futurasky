@@ -7,23 +7,16 @@
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   APP_LOG(APP_LOG_LEVEL_INFO, "Message received!");
 
-  // Get the first pair
-  Tuple *t = dict_read_first(iterator);
+  Tuple *temperature_tuple = dict_find(iterator, KEY_TEMP);
+  Tuple *icon_tuple = dict_find(iterator, KEY_ICON);
 
-  // Process all pairs present
-  while(t != NULL) {
-    // Process this pair's key
-    switch (t->key) {
-      case KEY_TEMP:
-        weather_set_temp((int)t->value->int32);
-        break;
-      case KEY_ICON:
-        weather_set_icon((int)t->value->int32);
-        break;
-    }
+  if(temperature_tuple && icon_tuple){
+    weather_info_t weather;
 
-    // Get next pair, if any
-    t = dict_read_next(iterator);
+    weather.temperature = temperature_tuple->value->int32;
+    weather.icon = icon_tuple->value->int32;
+
+    weather_update(&weather);
   }
 }
 

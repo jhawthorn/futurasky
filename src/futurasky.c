@@ -41,6 +41,7 @@ static void bluetooth_handler(bool connected) {
     /* Redraw weather to replace loading icon */
     weather_draw();
   } else {
+    vibes_short_pulse();
     weather_layer_set_icon(weather_layer, RESOURCE_ID_ICON_LOADING);
   }
 }

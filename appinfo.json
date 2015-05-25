@@ -2,7 +2,8 @@
   "uuid": "84f79cc9-69cf-4f11-927a-eafac3f14187",
   "shortName": "futurasky",
   "longName": "futurasky",
-  "companyName": "MakeAwesomeHappen",
+  "companyName": "John Hawthorn",
+  "capabilities": [ "location" ],
   "versionCode": 1,
   "versionLabel": "1.0",
   "watchapp": {

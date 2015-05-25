@@ -2,3 +2,5 @@
 # Ignore build generated files
 build
 .lock*
+src/js/pebble-js-app.js
+src/keys.h

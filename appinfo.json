@@ -10,10 +10,22 @@
     "watchface": true
   },
   "appKeys": {
-    "dummy": 0
+    "error": 0,
+    "request_update": 1,
+    "temp": 2
   },
   "resources": {
     "media": [
+      {
+        "type": "png",
+        "name": "ICON_LOADING",
+        "file": "images/loading.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_CLOUD",
+        "file": "images/cloud.png"
+      },
       {
         "name": "FUTURA_18",
         "trackingAdjust": 3,

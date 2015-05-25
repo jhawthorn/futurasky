@@ -1,11 +1,18 @@
 #include <pebble.h>
 
+#include "network.h"
+#include "weather_layer.h"
+#include "weather.h"
+
 #define TIME_FRAME      (GRect(0, 2, 144, 168-6))
 #define DATE_FRAME      (GRect(1, 66, 144, 168-62))
+#define WEATHER_FRAME   (GRect(0, 90, 144, 80))
 
 static Window *window;
 static TextLayer *time_layer;
 static TextLayer *date_layer;
+
+static WeatherLayer *weather_layer;
 
 static char time_text[] = "00:00";
 static char date_text[16];
@@ -54,13 +61,26 @@ static void window_load(Window *window) {
   text_layer_set_text_alignment(date_layer, GTextAlignmentCenter);
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(date_layer));
 
+  /* Weather */
+  weather_layer = weather_layer_create(WEATHER_FRAME);
+  layer_add_child(window_get_root_layer(window), weather_layer);
+
+  weather_init(weather_layer);
+  network_init();
+
+  network_request_update();
+
   initial_draw();
 
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
 }
 
 static void window_unload(Window *window) {
+  weather_deinit();
+  weather_layer_destroy(weather_layer);
+
   text_layer_destroy(time_layer);
+  text_layer_destroy(date_layer);
 }
 
 static void init(void) {

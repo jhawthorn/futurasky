@@ -15,8 +15,10 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     // Process this pair's key
     switch (t->key) {
       case KEY_TEMP:
-        APP_LOG(APP_LOG_LEVEL_INFO, "KEY_TEMP received with value %d", (int)t->value->int32);
         weather_set_temp((int)t->value->int32);
+        break;
+      case KEY_ICON:
+        weather_set_icon((int)t->value->int32);
         break;
     }
 

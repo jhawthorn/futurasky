@@ -5,3 +5,4 @@ void weather_deinit();
 
 void weather_refresh();
 void weather_set_temp(int temperature);
+void weather_set_icon(int icon);

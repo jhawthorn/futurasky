@@ -42,10 +42,26 @@ sendMessage = (data) ->
     console.log "Send failed"
   Pebble.sendAppMessage data, success, error
 
+forecastToPebbleIcon = (icon_name) ->
+  pbr = switch icon_name
+    when "clear-day" then "ICON_CLEAR_DAY"
+    when "clear-night" then "ICON_CLEAR_NIGHT"
+    when "rain" then "ICON_RAIN"
+    when "snow" then "ICON_SNOW"
+    when "sleet" then "ICON_HAIL"
+    when "wind" then "ICON_WIND"
+    when "fog" then "ICON_FOG"
+    when "cloudy" then "ICON_CLOUD"
+    when "partly-cloudy-day" then "ICON_CLOUDY_DAY"
+    when "partly-cloudy-night" then "ICON_CLOUDY_NIGHT"
+    else "ICON_CLOUD"
+  console.log("Using #{pbr} for '#{icon_name}'")
+  PebbleResources[pbr]
+
 Pebble.addEventListener "appmessage", (e) ->
   console.log("Refreshing weather")
   withLocalConditions (conditions) ->
-    console.log(JSON.stringify(conditions))
     sendMessage
       temp: Math.round(conditions.apparentTemperature)
+      icon: forecastToPebbleIcon(conditions.icon)
 

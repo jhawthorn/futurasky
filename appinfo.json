@@ -12,7 +12,8 @@
   "appKeys": {
     "error": 0,
     "request_update": 1,
-    "temp": 2
+    "temp": 2,
+    "icon": 3
   },
   "resources": {
     "media": [
@@ -25,6 +26,51 @@
         "type": "png",
         "name": "ICON_CLOUD",
         "file": "images/cloud.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_FOG",
+        "file": "images/fog.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_HAIL",
+        "file": "images/hail.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_SNOW",
+        "file": "images/snow.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_WIND",
+        "file": "images/wind.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_CLOUDY_DAY",
+        "file": "images/cloudy_day.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_CLOUDY_NIGHT",
+        "file": "images/cloudy_night.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_RAIN",
+        "file": "images/rain.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_CLEAR_DAY",
+        "file": "images/clear_day.png"
+      },
+      {
+        "type": "png",
+        "name": "ICON_CLEAR_NIGHT",
+        "file": "images/clear_night.png"
       },
       {
         "name": "FUTURA_18",

@@ -20,6 +20,11 @@ void weather_set_temp(int temperature){
     weather_layer_set_temp(layer, temperature);
 }
 
+void weather_set_icon(int icon){
+  if(layer)
+    weather_layer_set_icon(layer, icon);
+}
+
 void weather_refresh(){
   network_request_update();
 }

@@ -3,7 +3,7 @@
 #include "weather_layer.h"
 
 typedef struct {
-  TextLayer *temp_layer_background;
+  TextLayer *background_layer;
   TextLayer *temp_layer;
   GBitmap *icon;
   BitmapLayer *icon_layer;
@@ -21,9 +21,9 @@ WeatherLayer *weather_layer_create(GRect frame){
   small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FUTURA_35));
 
   // Add background layer
-  wld->temp_layer_background = text_layer_create(GRect(0, 10, 144, 68));
-  text_layer_set_background_color(wld->temp_layer_background, GColorWhite);
-  layer_add_child(weather_layer, text_layer_get_layer(wld->temp_layer_background));
+  wld->background_layer = text_layer_create(GRect(0, 10, 144, 68));
+  text_layer_set_background_color(wld->background_layer, GColorWhite);
+  layer_add_child(weather_layer, text_layer_get_layer(wld->background_layer));
 
   // Add temperature layer
   wld->temp_layer = text_layer_create(GRect(70, 19, 72, 80));
@@ -67,7 +67,7 @@ void weather_layer_destroy(WeatherLayer* weather_layer){
   WeatherLayerData *wld = layer_get_data(weather_layer);
 
   text_layer_destroy(wld->temp_layer);
-  text_layer_destroy(wld->temp_layer_background);
+  text_layer_destroy(wld->background_layer);
   bitmap_layer_destroy(wld->icon_layer);
 
   // Destroy the previous bitmap if we have one

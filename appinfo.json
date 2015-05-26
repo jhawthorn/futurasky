@@ -3,7 +3,7 @@
   "shortName": "futurasky",
   "longName": "futurasky",
   "companyName": "John Hawthorn",
-  "capabilities": [ "location" ],
+  "capabilities": [ "location", "configurable" ],
   "versionCode": 1,
   "versionLabel": "1.0",
   "watchapp": {

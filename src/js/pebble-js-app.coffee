@@ -1,7 +1,4 @@
 
-# Gotta love git rebase
-api_key = 'lol u wish'
-
 httpGet = (url, callback) ->
   req = new XMLHttpRequest()
   req.open('GET', url, true)
@@ -25,15 +22,30 @@ withLocation = (callback) ->
     maximumAge: 60000
   navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions)
 
+withApiKey = (callback) ->
+  config = readConfig()
+  callback(config.forecast_api_key)
+
 withLocalConditions = (callback) ->
   withLocation (coords) ->
-    url = "https://api.forecast.io/forecast/#{api_key}/#{coords.latitude},#{coords.longitude}?exclude=daily,flags&units=ca"
-    httpGet url, (data) ->
-      callback(data.currently)
+    withApiKey (api_key) ->
+      url = "https://api.forecast.io/forecast/#{api_key}/#{coords.latitude},#{coords.longitude}?exclude=daily,flags&units=ca"
+      httpGet url, (data) ->
+        callback(data.currently)
 
 Pebble.addEventListener 'ready', (e) ->
   console.log('PebbleKit JS is ready.')
-  #fetchLocation()
+
+Pebble.addEventListener 'showConfiguration', (e) ->
+  Pebble.openURL('https://jhawthorn.github.io/futurasky/#' + encodeURIComponent(localStorage.getItem('config')))
+
+readConfig = ->
+  JSON.parse(localStorage.getItem('config'))
+
+Pebble.addEventListener 'webviewclosed', (e) ->
+  configJSON = e.response
+  console.log "Configuration window returned: #{configJSON}"
+  localStorage.setItem 'config', configJSON
 
 sendMessage = (data) ->
   success = (e) ->

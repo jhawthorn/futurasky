@@ -1,5 +1,6 @@
 #include <pebble.h>
 
+#include "weather_layer.h"
 #include "weather.h"
 #include "network.h"
 #include "keys.h"
@@ -10,10 +11,6 @@
 
 weather_info_t current_weather;
 time_t weather_last_updated = 0;
-
-void weather_draw(){
-  weather_layer_draw();
-}
 
 static void load_data(){
   persist_read_data(STORAGE_CURRENT_WEATHER, &current_weather, sizeof(current_weather));
@@ -29,7 +26,7 @@ void weather_init(){
   if (persist_exists(STORAGE_CURRENT_WEATHER)) {
     load_data();
   }
-  weather_draw();
+  weather_layer_draw();
 }
 
 bool weather_available(){
@@ -51,7 +48,7 @@ void weather_update(weather_info_t *w){
   weather_last_updated = time(NULL);
 
   save_data();
-  weather_draw();
+  weather_layer_draw();
 }
 
 void weather_refresh(){

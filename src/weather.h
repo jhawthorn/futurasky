@@ -1,4 +1,3 @@
-#include "weather_layer.h"
 
 typedef struct {
   int temperature;
@@ -8,7 +7,6 @@ typedef struct {
 void weather_init();
 void weather_deinit();
 
-void weather_draw();
 void weather_refresh();
 void weather_update(weather_info_t *w);
 

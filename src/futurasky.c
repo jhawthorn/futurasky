@@ -41,7 +41,7 @@ static void bluetooth_handler(bool connected) {
     vibes_short_pulse();
   }
   /* Show redraw status */
-  weather_draw();
+  weather_layer_draw();
 }
 
 static void initial_draw() {

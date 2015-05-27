@@ -39,7 +39,7 @@ static void bluetooth_handler(bool connected) {
     vibes_short_pulse();
   }
   /* Show redraw status */
-  weather_layer_draw();
+  status_layer_draw();
 }
 
 static void initial_draw() {
@@ -72,7 +72,7 @@ static void window_load(Window *window) {
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(date_layer));
 
   /* Weather */
-  Layer *status_layer = weather_layer_create(WEATHER_FRAME);
+  Layer *status_layer = status_layer_create(WEATHER_FRAME);
   layer_add_child(window_get_root_layer(window), status_layer);
 
   weather_init();
@@ -86,7 +86,7 @@ static void window_load(Window *window) {
 
 static void window_unload(Window *window) {
   weather_deinit();
-  weather_layer_destroy();
+  status_layer_destroy();
 
   text_layer_destroy(time_layer);
   text_layer_destroy(date_layer);

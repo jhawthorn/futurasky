@@ -1,3 +1,3 @@
-Layer *weather_layer_create(GRect frame);
-void weather_layer_destroy();
-void weather_layer_draw();
+Layer *status_layer_create(GRect frame);
+void status_layer_destroy();
+void status_layer_draw();

@@ -26,7 +26,7 @@ void weather_init(){
   if (persist_exists(STORAGE_CURRENT_WEATHER)) {
     load_data();
   }
-  weather_layer_draw();
+  status_layer_draw();
 }
 
 bool weather_available(){
@@ -48,7 +48,7 @@ void weather_update(weather_info_t *w){
   weather_last_updated = time(NULL);
 
   save_data();
-  weather_layer_draw();
+  status_layer_draw();
 }
 
 void weather_refresh(){

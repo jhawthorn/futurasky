@@ -88,7 +88,7 @@ static void window_load(Window *window) {
 
 static void window_unload(Window *window) {
   weather_deinit();
-  weather_layer_destroy(weather_layer);
+  weather_layer_destroy();
 
   text_layer_destroy(time_layer);
   text_layer_destroy(date_layer);

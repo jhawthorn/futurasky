@@ -12,8 +12,6 @@ static Window *window;
 static TextLayer *time_layer;
 static TextLayer *date_layer;
 
-static WeatherLayer *weather_layer;
-
 static char time_text[] = "00:00";
 static char date_text[16];
 
@@ -74,8 +72,8 @@ static void window_load(Window *window) {
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(date_layer));
 
   /* Weather */
-  weather_layer = weather_layer_create(WEATHER_FRAME);
-  layer_add_child(window_get_root_layer(window), weather_layer);
+  Layer *status_layer = weather_layer_create(WEATHER_FRAME);
+  layer_add_child(window_get_root_layer(window), status_layer);
 
   weather_init();
   network_init();

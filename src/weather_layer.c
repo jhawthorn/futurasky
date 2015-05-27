@@ -9,9 +9,9 @@ static GBitmap *bitmap;
 static BitmapLayer *icon_layer;
 
 static GFont large_font, small_font;
-WeatherLayer *weather_layer;
+Layer *weather_layer;
 
-WeatherLayer *weather_layer_create(GRect frame){
+Layer *weather_layer_create(GRect frame){
   // Create a new layer with some extra space to save our custom Layer infos
   weather_layer = layer_create(frame);
 

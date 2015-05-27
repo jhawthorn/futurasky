@@ -37,13 +37,11 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void bluetooth_handler(bool connected) {
-  if(connected){
-    /* Redraw weather to replace loading icon */
-    weather_draw();
-  } else {
+  if(!connected){
     vibes_short_pulse();
-    weather_layer_set_icon(RESOURCE_ID_ICON_LOADING);
   }
+  /* Show redraw status */
+  weather_draw();
 }
 
 static void initial_draw() {

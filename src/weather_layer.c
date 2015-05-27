@@ -43,14 +43,14 @@ WeatherLayer *weather_layer_create(GRect frame){
   return weather_layer;
 }
 
-void weather_layer_set_temp(int temp){
+static void weather_layer_set_temp(int temp){
   WeatherLayerData *wld = layer_get_data(weather_layer);
   snprintf(wld->temp_str, sizeof(wld->temp_str), "%i°", temp);
 
   text_layer_set_text(wld->temp_layer, wld->temp_str);
 }
 
-void weather_layer_set_icon(uint32_t icon){
+static void weather_layer_set_icon(uint32_t icon){
   WeatherLayerData *wld = layer_get_data(weather_layer);
 
   GBitmap *new_icon = gbitmap_create_with_resource(icon);
@@ -65,7 +65,10 @@ void weather_layer_set_icon(uint32_t icon){
 }
 
 void weather_layer_draw(){
-  if(weather_available()) {
+  if(!bluetooth_connection_service_peek()){
+    /* bluetooth disconnected */
+    weather_layer_set_icon(RESOURCE_ID_ICON_LOADING);
+  } else if(weather_available()) {
     weather_layer_set_temp(weather_get_temperature());
     weather_layer_set_icon(weather_get_icon());
   } else {

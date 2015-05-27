@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-#include "weather_layer.h"
+#include "status_layer.h"
 #include "weather.h"
 #include "network.h"
 #include "keys.h"

@@ -1,7 +1,7 @@
 #include <pebble.h>
 
 #include "network.h"
-#include "weather_layer.h"
+#include "status_layer.h"
 #include "weather.h"
 
 #define TIME_FRAME      (GRect(0, 2, 144, 168-6))

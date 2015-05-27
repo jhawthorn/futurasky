@@ -1,7 +1,7 @@
 #include <pebble.h>
 
 #include "weather.h"
-#include "weather_layer.h"
+#include "status_layer.h"
 
 static TextLayer *background_layer;
 static TextLayer *temp_layer;

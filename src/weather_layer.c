@@ -70,7 +70,7 @@ void weather_layer_draw(){
   }
 }
 
-void weather_layer_destroy(WeatherLayer* weather_layer){
+void weather_layer_destroy(){
   text_layer_destroy(temp_layer);
   text_layer_destroy(background_layer);
   bitmap_layer_destroy(icon_layer);

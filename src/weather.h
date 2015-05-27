@@ -5,7 +5,7 @@ typedef struct {
   int icon;
 } weather_info_t;
 
-void weather_init(WeatherLayer *weather_layer);
+void weather_init();
 void weather_deinit();
 
 void weather_draw();

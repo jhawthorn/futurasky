@@ -77,7 +77,7 @@ static void window_load(Window *window) {
   weather_layer = weather_layer_create(WEATHER_FRAME);
   layer_add_child(window_get_root_layer(window), weather_layer);
 
-  weather_init(weather_layer);
+  weather_init();
   network_init();
 
   initial_draw();

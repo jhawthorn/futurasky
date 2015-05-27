@@ -8,8 +8,6 @@
 /* Update weather every 10 minutes */
 #define WEATHER_UPDATE_INTERVAL 10 * 60
 
-static void *layer = NULL;
-
 weather_info_t current_weather;
 time_t weather_last_updated = 0;
 
@@ -27,9 +25,7 @@ static void save_data(){
   persist_write_data(STORAGE_LAST_UPDATE, &weather_last_updated, sizeof(weather_last_updated));
 }
 
-void weather_init(WeatherLayer *weather_layer){
-  layer = weather_layer;
-
+void weather_init(){
   if (persist_exists(STORAGE_CURRENT_WEATHER)) {
     load_data();
   }
@@ -67,5 +63,4 @@ void weather_refresh(){
 }
 
 void weather_deinit(){
-  layer = NULL;
 }

@@ -42,7 +42,7 @@ static void bluetooth_handler(bool connected) {
     weather_draw();
   } else {
     vibes_short_pulse();
-    weather_layer_set_icon(weather_layer, RESOURCE_ID_ICON_LOADING);
+    weather_layer_set_icon(RESOURCE_ID_ICON_LOADING);
   }
 }
 

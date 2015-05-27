@@ -14,8 +14,7 @@ weather_info_t current_weather;
 time_t weather_last_updated = 0;
 
 void weather_draw(){
-  weather_layer_set_temp(layer, current_weather.temperature);
-  weather_layer_set_icon(layer, current_weather.icon);
+  weather_layer_draw();
 }
 
 static void load_data(){
@@ -33,10 +32,20 @@ void weather_init(WeatherLayer *weather_layer){
 
   if (persist_exists(STORAGE_CURRENT_WEATHER)) {
     load_data();
-    weather_draw();
-  } else {
-    weather_layer_set_icon(layer, RESOURCE_ID_ICON_LOADING);
   }
+  weather_draw();
+}
+
+bool weather_available(){
+  return !!weather_last_updated;
+}
+
+int weather_get_temperature(){
+  return current_weather.temperature;
+}
+
+int weather_get_icon(){
+  return current_weather.icon;
 }
 
 void weather_update(weather_info_t *w){

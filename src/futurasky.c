@@ -42,6 +42,10 @@ static void bluetooth_handler(bool connected) {
   status_layer_draw();
 }
 
+static void battery_handler(BatteryChargeState charge_handler) {
+  status_layer_draw();
+}
+
 static void initial_draw() {
   time_t now = time(NULL);
   tick_handler(localtime(&now), SECOND_UNIT | MINUTE_UNIT | HOUR_UNIT | DAY_UNIT);
@@ -81,6 +85,7 @@ static void window_load(Window *window) {
   initial_draw();
 
   tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+  battery_state_service_subscribe(battery_handler);
   bluetooth_connection_service_subscribe(bluetooth_handler);
 }
 

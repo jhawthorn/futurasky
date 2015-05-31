@@ -24,7 +24,7 @@ Layer *status_layer_create(GRect frame){
   layer_add_child(status_layer, text_layer_get_layer(background_layer));
 
   // Add temperature layer
-  temp_layer = text_layer_create(GRect(70, 19, 72, 80));
+  temp_layer = text_layer_create(GRect(60, 19, 82, 80));
   text_layer_set_background_color(temp_layer, GColorClear);
   text_layer_set_text_alignment(temp_layer, GTextAlignmentCenter);
   text_layer_set_font(temp_layer, large_font);
@@ -46,6 +46,13 @@ static void status_layer_set_temp(int temp){
   text_layer_set_text(temp_layer, temp_str);
 }
 
+static void status_layer_set_percent(int temp){
+  static char temp_str[6];
+  snprintf(temp_str, sizeof(temp_str), "%i", temp);
+
+  text_layer_set_text(temp_layer, temp_str);
+}
+
 static void status_layer_set_icon(uint32_t icon){
   GBitmap *new_bitmap = gbitmap_create_with_resource(icon);
   // Display the new bitmap
@@ -59,7 +66,12 @@ static void status_layer_set_icon(uint32_t icon){
 }
 
 void status_layer_draw(){
-  if(!bluetooth_connection_service_peek()){
+  BatteryChargeState charge_state = battery_state_service_peek();
+
+  if(charge_state.is_charging){
+    status_layer_set_icon(RESOURCE_ID_ICON_CHARGING);
+    status_layer_set_percent(charge_state.charge_percent);
+  }else if(!bluetooth_connection_service_peek()){
     /* bluetooth disconnected */
     status_layer_set_icon(RESOURCE_ID_ICON_LOADING);
   } else if(weather_available()) {

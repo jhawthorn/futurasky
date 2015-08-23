@@ -9,6 +9,7 @@ A watchface for pebble with forecast.io driven weather
   No unnecessary refreshes when navigating menus or switching faces.
 * Vibrate when bluetooth disconnected
 * Icon shows bluetooth disconnected
+* Battery status displayed when charging
 
 ## Acknowledgements
 
@@ -21,6 +22,6 @@ A watchface for pebble with forecast.io driven weather
 * Celsius only
 * Bluetooth vibration can't be disabled
 * No seconds display
-* No battery display
+* No low battery display
 * Displaying 3-digit temperatures is probably broken
 

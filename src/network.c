@@ -9,12 +9,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
   Tuple *temperature_tuple = dict_find(iterator, KEY_TEMP);
   Tuple *icon_tuple = dict_find(iterator, KEY_ICON);
+  Tuple *duration_tuple = dict_find(iterator, KEY_DURATION);
 
   if(temperature_tuple && icon_tuple){
     weather_info_t weather;
 
     weather.temperature = temperature_tuple->value->int32;
     weather.icon = icon_tuple->value->int32;
+    weather.duration = duration_tuple->value->int32;
 
     weather_update(&weather);
   }

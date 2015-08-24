@@ -37,6 +37,10 @@ int weather_get_temperature(){
   return current_weather.temperature;
 }
 
+int weather_get_duration(){
+  return current_weather.duration;
+}
+
 int weather_get_icon(){
   return current_weather.icon;
 }
@@ -44,6 +48,7 @@ int weather_get_icon(){
 void weather_update(weather_info_t *w){
   current_weather.temperature = w->temperature;
   current_weather.icon = w->icon;
+  current_weather.duration = w->duration;
 
   weather_last_updated = time(NULL);
 

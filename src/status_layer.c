@@ -5,6 +5,7 @@
 
 static TextLayer *background_layer;
 static TextLayer *temp_layer;
+static TextLayer *duration_layer;
 static GBitmap *bitmap;
 static BitmapLayer *icon_layer;
 
@@ -16,7 +17,7 @@ Layer *status_layer_create(GRect frame){
   status_layer = layer_create(frame);
 
   large_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FUTURA_40));
-  small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FUTURA_35));
+  small_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FUTURA_16));
 
   // Add background layer
   background_layer = text_layer_create(GRect(0, 10, 144, 68));
@@ -33,6 +34,13 @@ Layer *status_layer_create(GRect frame){
   // Add bitmap layer
   icon_layer = bitmap_layer_create(GRect(9, 13, 60, 60));
   layer_add_child(status_layer, bitmap_layer_get_layer(icon_layer));
+
+  // Add duration layer
+  duration_layer = text_layer_create(GRect(0, 60, 78, 18));
+  text_layer_set_background_color(duration_layer, GColorClear);
+  text_layer_set_text_alignment(temp_layer, GTextAlignmentCenter);
+  text_layer_set_font(duration_layer, small_font);
+  layer_add_child(status_layer, text_layer_get_layer(duration_layer));
 
   bitmap = NULL;
 
@@ -65,6 +73,14 @@ static void status_layer_set_icon(uint32_t icon){
   bitmap = new_bitmap;
 }
 
+static void status_layer_set_duration(int time){
+  static char temp_str[100];
+  text_layer_set_text_alignment(duration_layer, GTextAlignmentCenter);
+  snprintf(temp_str, sizeof(temp_str), "in %ih", time / 60 / 60);
+
+  text_layer_set_text(duration_layer, temp_str);
+}
+
 void status_layer_draw(){
   BatteryChargeState charge_state = battery_state_service_peek();
 
@@ -76,6 +92,7 @@ void status_layer_draw(){
     status_layer_set_icon(RESOURCE_ID_ICON_LOADING);
   } else if(weather_available()) {
     status_layer_set_temp(weather_get_temperature());
+    status_layer_set_duration(weather_get_duration());
     status_layer_set_icon(weather_get_icon());
   } else {
     status_layer_set_icon(RESOURCE_ID_ICON_LOADING);

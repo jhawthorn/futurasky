@@ -13,7 +13,8 @@
     "error": 0,
     "request_update": 1,
     "temp": 2,
-    "icon": 3
+    "icon": 3,
+    "duration": 4
   },
   "resources": {
     "media": [
@@ -92,9 +93,8 @@
         "type": "font"
       },
       {
-        "name": "FUTURA_35",
-        "trackingAdjust": -4,
-        "characterRegex": "[0-9\u00b0 -]",
+        "name": "FUTURA_16",
+        "characterRegex": "[0-9\u00b0 a-z]",
         "file": "fonts/futura.ttf",
         "type": "font"
       },

@@ -31,7 +31,7 @@ withLocalConditions = (callback) ->
     withApiKey (api_key) ->
       url = "https://api.forecast.io/forecast/#{api_key}/#{coords.latitude},#{coords.longitude}?exclude=daily,flags&units=ca"
       httpGet url, (data) ->
-        callback(data.currently)
+        callback(data)
 
 Pebble.addEventListener 'ready', (e) ->
   console.log('PebbleKit JS is ready.')
@@ -70,10 +70,23 @@ forecastToPebbleIcon = (icon_name) ->
   console.log("Using #{pbr} for '#{icon_name}'")
   PebbleResources[pbr]
 
+nextChange = (data) ->
+  hours = data.hourly.data
+  firstHour = hours[0]
+  for hour in hours
+    if firstHour.icon != hour.icon
+      return {
+        icon: hour.icon
+        reltime: (hour.time - firstHour.time)
+      }
+
+
 Pebble.addEventListener "appmessage", (e) ->
   console.log("Refreshing weather")
   withLocalConditions (conditions) ->
+    change = nextChange(conditions)
     sendMessage
-      temp: Math.round(conditions.apparentTemperature)
-      icon: forecastToPebbleIcon(conditions.icon)
+      temp: Math.round(conditions.currently.apparentTemperature)
+      icon: forecastToPebbleIcon(change.icon)
+      duration: change.reltime
 

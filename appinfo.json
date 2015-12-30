@@ -3,7 +3,10 @@
   "shortName": "futurasky",
   "longName": "futurasky",
   "companyName": "John Hawthorn",
-  "capabilities": [ "location", "configurable" ],
+  "capabilities": [
+    "location",
+    "configurable"
+  ],
   "versionCode": 1,
   "versionLabel": "1.0",
   "watchapp": {
@@ -105,5 +108,11 @@
         "file": "fonts/futura_condensed_bold-webfont.ttf"
       }
     ]
-  }
+  },
+  "targetPlatforms": [
+    "aplite",
+    "basalt",
+    "chalk"
+  ],
+  "sdkVersion": "3"
 }

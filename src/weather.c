@@ -38,7 +38,13 @@ int weather_get_temperature(){
 }
 
 int weather_get_duration(){
-  return current_weather.duration;
+  int time_diff = time(NULL) - weather_last_updated;
+  int duration = current_weather.duration - time_diff;
+  if(duration < 0) {
+    return 0;
+  } else {
+    return duration;
+  }
 }
 
 int weather_get_icon(){

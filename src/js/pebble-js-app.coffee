@@ -54,39 +54,97 @@ sendMessage = (data) ->
     console.log "Send failed"
   Pebble.sendAppMessage data, success, error
 
+
+class Forecast
+  constructor: (data) ->
+    {@time, @precipProbability, @cloudCover} = data
+    @icon = this.guessIcon()
+
+  is_raining: ->
+    @precipProbability > 0.05
+
+  is_clear: ->
+    @cloudCover < 0.2
+
+  is_partly_cloudy: ->
+    @cloudCover >= 0.2
+
+  is_mostly_cloudy: ->
+    @cloudCover >= 0.75
+
+  guessIcon: ->
+    if this.is_raining()
+      "ICON_RAIN"
+    else if this.is_mostly_cloudy()
+      "ICON_CLOUD"
+    else if this.is_partly_cloudy()
+      "ICON_CLOUDY_DAY"
+    else
+      "ICON_CLEAR_DAY"
+
 forecastToPebbleIcon = (icon_name) ->
-  pbr = switch icon_name
-    when "clear-day" then "ICON_CLEAR_DAY"
-    when "clear-night" then "ICON_CLEAR_NIGHT"
-    when "rain" then "ICON_RAIN"
-    when "snow" then "ICON_SNOW"
-    when "sleet" then "ICON_HAIL"
-    when "wind" then "ICON_WIND"
-    when "fog" then "ICON_FOG"
-    when "cloudy" then "ICON_CLOUD"
-    when "partly-cloudy-day" then "ICON_CLOUDY_DAY"
-    when "partly-cloudy-night" then "ICON_CLOUDY_NIGHT"
-    else "ICON_CLOUD"
-  console.log("Using #{pbr} for '#{icon_name}'")
-  PebbleResources[pbr]
+  #pbr = switch icon_name
+  #  when "clear-day" then "ICON_CLEAR_DAY"
+  #  when "clear-night" then "ICON_CLEAR_NIGHT"
+  #  when "rain" then "ICON_RAIN"
+  #  when "snow" then "ICON_SNOW"
+  #  when "sleet" then "ICON_HAIL"
+  #  when "wind" then "ICON_WIND"
+  #  when "fog" then "ICON_FOG"
+  #  when "cloudy" then "ICON_CLOUD"
+  #  when "partly-cloudy-day" then "ICON_CLOUDY_DAY"
+  #  when "partly-cloudy-night" then "ICON_CLOUDY_NIGHT"
+  #  else "ICON_CLOUD"
+  #console.log("Using #{pbr} for '#{icon_name}'")
+  PebbleResources[icon_name]
+
+detectChange = (forecasts) ->
+  first = forecasts[0]
+  for forecast in forecasts
+    if first.icon != forecast.icon
+      return forecast
+  return null
 
 nextChange = (data) ->
   hours = data.hourly.data
-  firstHour = hours[0]
-  for hour in hours
-    if firstHour.icon != hour.icon
-      return {
-        icon: hour.icon
-        reltime: (hour.time - firstHour.time)
-      }
-
+  hours = (new Forecast(x) for x in hours)
+  minutes = data.minutely.data
+  minutes = (new Forecast(x) for x in minutes)
+  current = new Forecast(data.currently)
+  first = hours[0]
+  if minutes[0].is_raining()
+    change = detectChange(minutes)
+    time = if change then (change.time - current.time) else 0
+    return {
+      icon: 'ICON_RAIN'
+      reltime: time
+      is_current: true
+    }
+  else if change = detectChange(minutes)
+    return {
+      icon: change.icon
+      reltime: (change.time - current.time)
+      is_current: false
+    }
+  else if change = detectChange(hours)
+    return {
+      icon: change.icon
+      reltime: (change.time - current.time)
+      is_current: false
+    }
+  else
+    return {
+      icon: current.icon
+      reltime: 0
+      is_current: true
+    }
 
 Pebble.addEventListener "appmessage", (e) ->
   console.log("Refreshing weather")
   withLocalConditions (conditions) ->
     change = nextChange(conditions)
+    console.log(JSON.stringify(change))
     sendMessage
       temp: Math.round(conditions.currently.apparentTemperature)
       icon: forecastToPebbleIcon(change.icon)
       duration: change.reltime
-

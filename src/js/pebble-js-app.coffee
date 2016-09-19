@@ -61,7 +61,7 @@ class Forecast
     @icon = this.guessIcon()
 
   is_raining: ->
-    @precipProbability > 0.05
+    @precipProbability > 0.3
 
   is_clear: ->
     @cloudCover < 0.2
@@ -145,6 +145,6 @@ Pebble.addEventListener "appmessage", (e) ->
     change = nextChange(conditions)
     console.log(JSON.stringify(change))
     sendMessage
-      temp: Math.round(conditions.currently.apparentTemperature)
+      temp: Math.round(conditions.currently.temperature)
       icon: forecastToPebbleIcon(change.icon)
       duration: change.reltime

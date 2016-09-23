@@ -1,19 +1,5 @@
 import PebbleResources from 'PebbleResources'
 
-let httpGet = function(url, callback) {
-  let req = new XMLHttpRequest()
-  req.open('GET', url, true)
-  req.onload = function(e) {
-    if (req.readyState === 4 && req.status === 200) {
-      let response = JSON.parse(req.responseText)
-      return callback(response)
-     } else {
-       return console.log('Error making HTTP request')
-     }
-  };
-  return req.send(null)
-};
-
 let withLocation = function(callback) {
   let locationSuccess = pos => callback(pos.coords)
 
@@ -31,15 +17,16 @@ let withApiKey = function(callback) {
   callback(config.forecast_api_key)
 };
 
-let withLocalConditions = callback =>
-  withLocation(coords =>
-    withApiKey(function(api_key) {
+function withLocalConditions(callback) {
+  withLocation(coords => {
+    withApiKey(api_key => {
       let url = `https://api.forecast.io/forecast/${api_key}/${coords.latitude},${coords.longitude}?exclude=daily,flags&units=ca`;
-      httpGet(url, data => callback(data)
-      );
+      fetch(url)
+        .then(response => response.json())
+        .then(data => callback(data))
     })
-  )
-;
+  })
+}
 
 Pebble.addEventListener('ready', e => {
   console.log('PebbleKit JS is ready.')

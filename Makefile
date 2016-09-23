@@ -7,7 +7,7 @@ src/js/pebble-js-app.js: appinfo.json $(JS_FILES)
 	npm run compile
 
 src/keys.h: appinfo.json
-	coffee tools/generate_keys.coffee > src/keys.h
+	node tools/generate_keys.js > src/keys.h
 
 run: build
 	pebble install --logs

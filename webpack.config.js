@@ -3,10 +3,10 @@ module.exports = function(options) {
   var webpack = require('webpack');
   var config = {};
 
-  config.context = path.join(__dirname, 'app');
+  config.context = path.join(__dirname, 'js');
 
   config.entry = {
-    default: './js/default.js'
+    default: './default.js'
   };
 
   config.output = {
@@ -26,12 +26,16 @@ module.exports = function(options) {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: "babel-loader"
+      },
+      {
+        test: /\.json$/,
+        loader: "json-loader"
       }
     ]
   }
 
   config.resolve = {
-    modules: [path.resolve(__dirname, "app"), "node_modules"]
+    modules: [path.resolve(__dirname, "js"), "node_modules"]
   };
 
   return config;

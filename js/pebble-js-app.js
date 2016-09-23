@@ -155,7 +155,7 @@ let nextChange = function(data) {
 
 Pebble.addEventListener("appmessage", function(e) {
   console.log("Refreshing weather")
-  return withLocalConditions(function(conditions) {
+  withLocalConditions(function(conditions) {
     let change = nextChange(conditions)
     console.log(JSON.stringify(change))
     sendMessage({

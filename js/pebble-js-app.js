@@ -1,65 +1,67 @@
 import PebbleResources from 'PebbleResources'
 
 let httpGet = function(url, callback) {
-  let req = new XMLHttpRequest();
-  req.open('GET', url, true);
+  let req = new XMLHttpRequest()
+  req.open('GET', url, true)
   req.onload = function(e) {
     if (req.readyState === 4 && req.status === 200) {
-      let response = JSON.parse(req.responseText);
-      return callback(response);
+      let response = JSON.parse(req.responseText)
+      return callback(response)
      } else {
-       return console.log('Error making HTTP request');
+       return console.log('Error making HTTP request')
      }
   };
-  return req.send(null);
+  return req.send(null)
 };
 
 let withLocation = function(callback) {
-  let locationSuccess = pos => callback(pos.coords);
+  let locationSuccess = pos => callback(pos.coords)
 
-  let locationError = err => console.warn(`Location error (${err.code}): ${err.message}`);
+  let locationError = err => console.warn(`Location error (${err.code}): ${err.message}`)
 
   let locationOptions = {
     timeout: 15000,
     maximumAge: 60000
-  };
-  return navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
+  }
+  navigator.geolocation.getCurrentPosition(locationSuccess, locationError, locationOptions);
 };
 
 let withApiKey = function(callback) {
-  let config = readConfig();
-  return callback(config.forecast_api_key);
+  let config = readConfig()
+  callback(config.forecast_api_key)
 };
 
 let withLocalConditions = callback =>
   withLocation(coords =>
     withApiKey(function(api_key) {
       let url = `https://api.forecast.io/forecast/${api_key}/${coords.latitude},${coords.longitude}?exclude=daily,flags&units=ca`;
-      return httpGet(url, data => callback(data)
+      httpGet(url, data => callback(data)
       );
     })
   )
 ;
 
-Pebble.addEventListener('ready', e => console.log('PebbleKit JS is ready.')
-);
+Pebble.addEventListener('ready', e => {
+  console.log('PebbleKit JS is ready.')
+})
 
-Pebble.addEventListener('showConfiguration', e => Pebble.openURL(`https://jhawthorn.github.io/futurasky/#${encodeURIComponent(localStorage.getItem('config'))}`)
-);
+Pebble.addEventListener('showConfiguration', e => {
+  Pebble.openURL(`https://jhawthorn.github.io/futurasky/#${encodeURIComponent(localStorage.getItem('config'))}`)
+})
 
-var readConfig = () => JSON.parse(localStorage.getItem('config'));
+var readConfig = () => JSON.parse(localStorage.getItem('config'))
 
 Pebble.addEventListener('webviewclosed', function(e) {
-  let configJSON = e.response;
-  console.log(`Configuration window returned: ${configJSON}`);
-  return localStorage.setItem('config', configJSON);
+  let configJSON = e.response
+  console.log(`Configuration window returned: ${configJSON}`)
+  localStorage.setItem('config', configJSON)
 }
 );
 
 let sendMessage = function(data) {
-  let success = e => console.log("Send successful");
-  let error = e => console.log("Send failed");
-  return Pebble.sendAppMessage(data, success, error);
+  let success = e => console.log("Send successful")
+  let error = e => console.log("Send failed")
+  Pebble.sendAppMessage(data, success, error)
 };
 
 
@@ -116,26 +118,26 @@ let forecastToPebbleIcon = icon_name =>
 ;
 
 let detectChange = function(forecasts) {
-  let first = forecasts[0];
+  let first = forecasts[0]
   for (let i = 0; i < forecasts.length; i++) {
-    let forecast = forecasts[i];
+    let forecast = forecasts[i]
     if (first.icon !== forecast.icon) {
-      return forecast;
+      return forecast
     }
   }
-  return null;
+  return null
 };
 
 let nextChange = function(data) {
-  var change;
-  let hours = data.hourly.data;
-  hours = (hours.map((x) => new Forecast(x)));
-  let minutes = data.minutely.data;
-  minutes = (minutes.map((x) => new Forecast(x)));
-  let current = new Forecast(data.currently);
-  let first = hours[0];
+  var change
+  let hours = data.hourly.data
+  hours = (hours.map((x) => new Forecast(x)))
+  let minutes = data.minutely.data
+  minutes = (minutes.map((x) => new Forecast(x)))
+  let current = new Forecast(data.currently)
+  let first = hours[0]
   if (minutes[0].is_raining()) {
-    var change = detectChange(minutes);
+    const change = detectChange(minutes);
     let time = change ? (change.time - current.time) : 0;
     return {
       icon: 'ICON_RAIN',
@@ -164,15 +166,14 @@ let nextChange = function(data) {
 };
 
 Pebble.addEventListener("appmessage", function(e) {
-  console.log("Refreshing weather");
+  console.log("Refreshing weather")
   return withLocalConditions(function(conditions) {
-    let change = nextChange(conditions);
-    console.log(JSON.stringify(change));
-    return sendMessage({
+    let change = nextChange(conditions)
+    console.log(JSON.stringify(change))
+    sendMessage({
       temp: Math.round(conditions.currently.temperature),
       icon: forecastToPebbleIcon(change.icon),
       duration: change.reltime
-    });
-  });
-}
-);
+    })
+  })
+})

@@ -40,10 +40,11 @@ var readConfig = () => JSON.parse(localStorage.getItem('config'))
 
 Pebble.addEventListener('webviewclosed', function(e) {
   let configJSON = e.response
-  console.log(`Configuration window returned: ${configJSON}`)
-  localStorage.setItem('config', configJSON)
-}
-);
+  if(configJSON) {
+    console.log(`Configuration window returned: ${configJSON}`)
+    localStorage.setItem('config', configJSON)
+  }
+})
 
 let sendMessage = function(data) {
   let success = e => console.log("Send successful")

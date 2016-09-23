@@ -88,22 +88,7 @@ class Forecast {
   }
 }
 
-let forecastToPebbleIcon = icon_name =>
-  //pbr = switch icon_name
-  //  when "clear-day" then "ICON_CLEAR_DAY"
-  //  when "clear-night" then "ICON_CLEAR_NIGHT"
-  //  when "rain" then "ICON_RAIN"
-  //  when "snow" then "ICON_SNOW"
-  //  when "sleet" then "ICON_HAIL"
-  //  when "wind" then "ICON_WIND"
-  //  when "fog" then "ICON_FOG"
-  //  when "cloudy" then "ICON_CLOUD"
-  //  when "partly-cloudy-day" then "ICON_CLOUDY_DAY"
-  //  when "partly-cloudy-night" then "ICON_CLOUDY_NIGHT"
-  //  else "ICON_CLOUD"
-  //console.log("Using #{pbr} for '#{icon_name}'")
-  PebbleResources[icon_name]
-;
+let forecastToPebbleIcon = icon_name => PebbleResources[icon_name]
 
 let detectChange = function(forecasts) {
   let first = forecasts[0]
